@@ -10,7 +10,7 @@ export async function useViteMiddleware(app: FastifyInstance) {
 
   // Register Vite Middleware (Only for Frontend Routes)
   app.addHook('onRequest', (req, res, next) => {
-    const backendRoutes = ['/auth', '/api'];
+    const backendRoutes = ['/auth', '/api', '/ws'];
 
     // If request matches a backend route, let Fastify handle it
     if (backendRoutes.some((route) => req.url.startsWith(route))) {

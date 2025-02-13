@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { useAuthStore } from './stores/auth';
+import { onMounted, ref } from 'vue';
+
+const loading = ref(true);
+const authStore = useAuthStore();
+onMounted(async () => {
+  await authStore.fetchUser();
+  loading.value = false;// Fetch user info when app loads
+});
 </script>
 
 <template>
@@ -18,7 +26,8 @@ import HelloWorld from './components/HelloWorld.vue'
     </ul>
   </nav>
   <main>
-    <RouterView />
+    <div v-if="loading" class="loading">🔄 Checking authentication...</div>
+    <RouterView v-else/>
   </main>
 </template>
 

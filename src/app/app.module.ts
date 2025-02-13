@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify'
 import { ConfigModule } from './modules/config/config.module'
 import { ProxyModule } from './modules/proxy/proxy.module'
 import { AuthModule } from './modules/auth/auth.module'
+import { observabilityWebSocketModule } from './modules/observability/observability.websocket';
 import fastifyCookie from '@fastify/cookie';
 
 export class AppModule {
@@ -10,6 +11,8 @@ export class AppModule {
   async register(): Promise<void> {
     // Register application modules
     new ConfigModule(this.app).register()
+
+    await (new observabilityWebSocketModule(this.app).register())
 
     // Register the cookie plugin
     this.app.register(fastifyCookie, {
@@ -23,6 +26,6 @@ export class AppModule {
 
     new ProxyModule(this.app).register()
     await (new AuthModule(this.app).register())
-    console.log('🚀 Application modules registered');
+    console.log('✅ Application modules registered');
   }
 }
