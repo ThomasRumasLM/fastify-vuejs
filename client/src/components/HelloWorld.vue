@@ -1,33 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import type { UserResponse } from '../types/user'
+import { useAuthStore } from '../stores/auth';
 
 defineProps<{ msg: string }>()
 
 const count: Number = ref(0)
-const userInfo: UserResponse = ref(null)
-
-onMounted(async () => {
-  console.log('HelloWorld mounted')
-  try {
-    const response = await fetch('/auth/user')
-    if(response.status !== 200) {
-      console.log('Not logged in')
-    } else {
-      const data = await response.json()
-      userInfo.value = data
-    }
-  } catch (error) {
-    console.error(error);
-  }
-});
+const authStore = useAuthStore();
 </script>
 
 <template>
   <h1>{{ msg }}</h1>
 
-  <h2 v-if="userInfo">
-    You are logged in as {{ userInfo.name }}
+  <h2 v-if="authStore.isAuthenticated">
+    You are logged in as {{ authStore.user.name }}
   </h2>
   <h2 v-else>You are not logged in! go to <a href="/auth/login">login page</a></h2>
 
